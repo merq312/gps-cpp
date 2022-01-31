@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/merc312/cpp/jca-cpp/build",
+  "command": "/usr/sbin/c++  -I/home/merc312/.conan/data/paho-mqtt-cpp/1.2.0/_/_/package/d6850e61bc4760f33a856f653143e7d06020eb6c/include -I/home/merc312/.conan/data/paho-mqtt-c/1.3.9/_/_/package/6fbd1993993594bd3f9451023a96c5ec2eef0e19/include -I/home/merc312/.conan/data/openssl/1.1.1k/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -std=gnu++17 -o CMakeFiles/tests.dir/test.cpp.o -c /home/merc312/cpp/jca-cpp/src/test.cpp",
+  "file": "/home/merc312/cpp/jca-cpp/src/test.cpp"
+},
+{
+  "directory": "/home/merc312/cpp/jca-cpp/build",
+  "command": "/usr/sbin/c++  -I/home/merc312/.conan/data/paho-mqtt-cpp/1.2.0/_/_/package/d6850e61bc4760f33a856f653143e7d06020eb6c/include -I/home/merc312/.conan/data/paho-mqtt-c/1.3.9/_/_/package/6fbd1993993594bd3f9451023a96c5ec2eef0e19/include -I/home/merc312/.conan/data/openssl/1.1.1k/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -std=gnu++17 -o CMakeFiles/gps.dir/main.cpp.o -c /home/merc312/cpp/jca-cpp/src/main.cpp",
+  "file": "/home/merc312/cpp/jca-cpp/src/main.cpp"
+}
+]
