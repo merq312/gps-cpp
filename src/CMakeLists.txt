@@ -15,7 +15,7 @@ add_compile_options(-Wall -Wextra -pedantic -Werror)
 # TESTING ////////////////////////////////////////////////
 
 find_package(Catch2 REQUIRED)
-add_executable(tests test.cpp gps.cpp)
+add_executable(tests gps.test.cpp gps.cpp)
 target_link_libraries(tests Catch2::Catch2)
 
 include(CTest)

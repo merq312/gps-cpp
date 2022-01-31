@@ -1,12 +1,22 @@
 [
 {
   "directory": "/home/merc312/cpp/jca-cpp/build",
-  "command": "/usr/sbin/c++  -I/home/merc312/.conan/data/paho-mqtt-cpp/1.2.0/_/_/package/d6850e61bc4760f33a856f653143e7d06020eb6c/include -I/home/merc312/.conan/data/paho-mqtt-c/1.3.9/_/_/package/6fbd1993993594bd3f9451023a96c5ec2eef0e19/include -I/home/merc312/.conan/data/openssl/1.1.1k/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -std=gnu++17 -o CMakeFiles/tests.dir/test.cpp.o -c /home/merc312/cpp/jca-cpp/src/test.cpp",
+  "command": "/usr/sbin/c++  -I/home/merc312/.conan/data/paho-mqtt-cpp/1.2.0/_/_/package/d6850e61bc4760f33a856f653143e7d06020eb6c/include -I/home/merc312/.conan/data/stduuid/1.0/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/home/merc312/.conan/data/paho-mqtt-c/1.3.9/_/_/package/6fbd1993993594bd3f9451023a96c5ec2eef0e19/include -I/home/merc312/.conan/data/ms-gsl/2.0.0/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/home/merc312/.conan/data/libuuid/1.0.3/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -I/home/merc312/.conan/data/libuuid/1.0.3/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include/uuid -I/home/merc312/.conan/data/openssl/1.1.1k/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -Wall -Wextra -pedantic -Werror -std=gnu++17 -o CMakeFiles/tests.dir/test.cpp.o -c /home/merc312/cpp/jca-cpp/src/test.cpp",
   "file": "/home/merc312/cpp/jca-cpp/src/test.cpp"
 },
 {
   "directory": "/home/merc312/cpp/jca-cpp/build",
-  "command": "/usr/sbin/c++  -I/home/merc312/.conan/data/paho-mqtt-cpp/1.2.0/_/_/package/d6850e61bc4760f33a856f653143e7d06020eb6c/include -I/home/merc312/.conan/data/paho-mqtt-c/1.3.9/_/_/package/6fbd1993993594bd3f9451023a96c5ec2eef0e19/include -I/home/merc312/.conan/data/openssl/1.1.1k/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -std=gnu++17 -o CMakeFiles/gps.dir/main.cpp.o -c /home/merc312/cpp/jca-cpp/src/main.cpp",
+  "command": "/usr/sbin/c++  -I/home/merc312/.conan/data/paho-mqtt-cpp/1.2.0/_/_/package/d6850e61bc4760f33a856f653143e7d06020eb6c/include -I/home/merc312/.conan/data/stduuid/1.0/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/home/merc312/.conan/data/paho-mqtt-c/1.3.9/_/_/package/6fbd1993993594bd3f9451023a96c5ec2eef0e19/include -I/home/merc312/.conan/data/ms-gsl/2.0.0/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/home/merc312/.conan/data/libuuid/1.0.3/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -I/home/merc312/.conan/data/libuuid/1.0.3/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include/uuid -I/home/merc312/.conan/data/openssl/1.1.1k/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -Wall -Wextra -pedantic -Werror -std=gnu++17 -o CMakeFiles/tests.dir/gps.cpp.o -c /home/merc312/cpp/jca-cpp/src/gps.cpp",
+  "file": "/home/merc312/cpp/jca-cpp/src/gps.cpp"
+},
+{
+  "directory": "/home/merc312/cpp/jca-cpp/build",
+  "command": "/usr/sbin/c++  -I/home/merc312/.conan/data/paho-mqtt-cpp/1.2.0/_/_/package/d6850e61bc4760f33a856f653143e7d06020eb6c/include -I/home/merc312/.conan/data/stduuid/1.0/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/home/merc312/.conan/data/paho-mqtt-c/1.3.9/_/_/package/6fbd1993993594bd3f9451023a96c5ec2eef0e19/include -I/home/merc312/.conan/data/ms-gsl/2.0.0/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/home/merc312/.conan/data/libuuid/1.0.3/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -I/home/merc312/.conan/data/libuuid/1.0.3/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include/uuid -I/home/merc312/.conan/data/openssl/1.1.1k/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -Wall -Wextra -pedantic -Werror -DGSL_TERMINATE_ON_CONTRACT_VIOLATION -std=gnu++17 -o CMakeFiles/gps.dir/main.cpp.o -c /home/merc312/cpp/jca-cpp/src/main.cpp",
   "file": "/home/merc312/cpp/jca-cpp/src/main.cpp"
+},
+{
+  "directory": "/home/merc312/cpp/jca-cpp/build",
+  "command": "/usr/sbin/c++  -I/home/merc312/.conan/data/paho-mqtt-cpp/1.2.0/_/_/package/d6850e61bc4760f33a856f653143e7d06020eb6c/include -I/home/merc312/.conan/data/stduuid/1.0/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/home/merc312/.conan/data/paho-mqtt-c/1.3.9/_/_/package/6fbd1993993594bd3f9451023a96c5ec2eef0e19/include -I/home/merc312/.conan/data/ms-gsl/2.0.0/_/_/package/5ab84d6acfe1f23c4fae0ab88f26e3a396351ac9/include -I/home/merc312/.conan/data/libuuid/1.0.3/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -I/home/merc312/.conan/data/libuuid/1.0.3/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include/uuid -I/home/merc312/.conan/data/openssl/1.1.1k/_/_/package/dfbe50feef7f3c6223a476cd5aeadb687084a646/include -Wall -Wextra -pedantic -Werror -DGSL_TERMINATE_ON_CONTRACT_VIOLATION -std=gnu++17 -o CMakeFiles/gps.dir/gps.cpp.o -c /home/merc312/cpp/jca-cpp/src/gps.cpp",
+  "file": "/home/merc312/cpp/jca-cpp/src/gps.cpp"
 }
 ]

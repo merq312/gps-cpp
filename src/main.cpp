@@ -1,3 +1,4 @@
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -6,82 +7,96 @@
 #pragma GCC diagnostic pop
 
 #include "gps.h"
+#include "uuid.h"
 #include <chrono>
 #include <iostream>
 #include <string>
 #include <thread>
 
-/////////////////////////////////////////////////////////////////////////////
-
 int main() {
-  const std::string SERVER_ADDRESS{"tcp://localhost:8883"};
+  const std::string server_address{"tcp://localhost:8883"};
   // const string SERVER_ADDRESS{"tcp://test.mosquitto.org"};
-  const std::string CLIENT_ID{"paho_cpp_sync_consume"};
 
-  mqtt::client cli(SERVER_ADDRESS, CLIENT_ID);
+  const uuids::uuid _uuid = uuids::uuid_system_generator{}();
+  const std::string client_id = uuids::to_string(_uuid);
+
+  mqtt::client cli(server_address, client_id);
 
   auto connOpts = mqtt::connect_options_builder()
-                      .user_name("user")
-                      .password("passwd")
                       .keep_alive_interval(std::chrono::seconds(30))
                       .automatic_reconnect(std::chrono::seconds(2),
                                            std::chrono::seconds(30))
                       .clean_session(false)
                       .finalize();
 
-  const std::vector<std::string> TOPICS{"data/#", "gps"};
-  const std::vector<int> QOS{0, 1};
+  const std::vector<std::string> topics{"data/#", "gps"};
+  const std::vector<int> qos{0, 1};
 
   try {
-    std::cout << "Connecting to the MQTT server..." << std::flush;
-    mqtt::connect_response rsp = cli.connect(connOpts);
-    std::cout << "OK\n" << std::endl;
+    std::cout << "Connecting to the MQTT server...\n";
+    cli.connect(connOpts);
 
-    std::cout << "Subscribing to topics..." << std::flush;
-    cli.subscribe(TOPICS, QOS);
-    std::cout << "OK" << std::endl;
+    std::cout << "Subscribing to topics...\n";
+    cli.subscribe(topics, qos);
 
-    // Consume messages
+    std::cout << "client id: " << client_id.substr(0, 8) << "\n\n";
 
-    while (true) {
-      auto res = cli.consume_message();
+    MockGPS gps = MockGPS();
 
-      if (res) {
-        // std::cout << msg->get_topic() << ": " << msg->to_string() <<
-        // std::endl;
+    std::thread publisher([&]() {
+      while (true) {
+        gps.update_pos();
+        const auto payload = client_id + ',' + std::to_string(gps.lat) + ',' +
+                             std::to_string(gps.lon);
+        const auto pubmsg = mqtt::make_message(topics[1], payload, 1, 0);
+        cli.publish(pubmsg);
 
-        const std::string msg = res->to_string();
-
-        auto pos = msg.find(',');
-        auto uuid = msg.substr(0, pos);
-        auto rest = msg.substr(pos + 1, msg.length());
-
-        pos = rest.find(',');
-        double lat = std::stod(rest.substr(0, pos));
-        double lon = std::stod(rest.substr(pos + 1, rest.length()));
-
-        std::cout << lat << '\n';
-        std::cout << lon << '\n';
-        auto dist = distanceBetween(45.0, -81.0, lat, lon);
-
-        std::cout << dist << std::endl;
-
-      } else if (!cli.is_connected()) {
-        std::cout << "Lost connection" << std::endl;
-        while (!cli.is_connected()) {
-          std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        if (!cli.is_connected()) {
+          break;
         }
-        std::cout << "Re-established connection" << std::endl;
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
       }
+    });
+
+    std::thread subscriber([&]() {
+      while (true) {
+        const auto res = cli.consume_message();
+
+        if (res) {
+          const auto msg = res->to_string();
+
+          auto pos = msg.find(',');
+          const auto sender_id = msg.substr(0, pos);
+
+          if (sender_id == client_id) {
+            continue;
+          }
+
+          const auto rest = msg.substr(pos + 1, msg.length());
+
+          pos = rest.find(',');
+          const double lat = std::stod(rest.substr(0, pos));
+          const double lon = std::stod(rest.substr(pos + 1, rest.length()));
+
+          const auto dist = distanceBetween(gps.lat, gps.lon, lat, lon);
+
+          std::cout << sender_id.substr(0, 8) << ": " << std::setprecision(3)
+                    << dist << "km\n";
+
+        } else if (!cli.is_connected()) {
+          break;
+        }
+      }
+    });
+
+    if (publisher.joinable() && subscriber.joinable()) {
+      publisher.join();
+      subscriber.join();
+      std::cout << "Lost connection\n";
     }
-
-    // Disconnect
-
-    std::cout << "\nDisconnecting from the MQTT server..." << std::flush;
-    cli.disconnect();
-    std::cout << "OK" << std::endl;
   } catch (const mqtt::exception &exc) {
-    std::cerr << exc.what() << std::endl;
+    std::cerr << exc.what() << '\n';
     return 1;
   }
 
