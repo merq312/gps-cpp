@@ -9,7 +9,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 find_package(Catch2 REQUIRED)
-add_executable(tests test.cpp)
+add_executable(tests test.cpp gps.cpp)
 target_link_libraries(tests Catch2::Catch2)
 
 include(CTest)
@@ -19,5 +19,5 @@ catch_discover_tests(tests)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-add_executable(gps main.cpp)
+add_executable(gps main.cpp gps.cpp)
 target_link_libraries(gps ${CONAN_LIBS})
