@@ -1,86 +1,83 @@
+#include "gps.h"
 #include "mqtt/client.h"
 #include <chrono>
 #include <iostream>
 #include <string>
 #include <thread>
 
-using namespace std;
-using namespace std::chrono;
-
 /////////////////////////////////////////////////////////////////////////////
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
-    const string SERVER_ADDRESS{"tcp://localhost:8883"};
-    // const string SERVER_ADDRESS{"tcp://test.mosquitto.org"};
-    const string CLIENT_ID{"paho_cpp_sync_consume"};
+int main() {
+  const std::string SERVER_ADDRESS{"tcp://localhost:8883"};
+  // const string SERVER_ADDRESS{"tcp://test.mosquitto.org"};
+  const std::string CLIENT_ID{"paho_cpp_sync_consume"};
 
-    mqtt::client cli(SERVER_ADDRESS, CLIENT_ID);
+  mqtt::client cli(SERVER_ADDRESS, CLIENT_ID);
 
-    auto connOpts = mqtt::connect_options_builder()
-            .user_name("user")
-            .password("passwd")
-            .keep_alive_interval(seconds(30))
-            .automatic_reconnect(seconds(2), seconds(30))
-            .clean_session(false)
-            .finalize();
+  auto connOpts = mqtt::connect_options_builder()
+                      .user_name("user")
+                      .password("passwd")
+                      .keep_alive_interval(std::chrono::seconds(30))
+                      .automatic_reconnect(std::chrono::seconds(2),
+                                           std::chrono::seconds(30))
+                      .clean_session(false)
+                      .finalize();
 
-    // You can install a callback to change some connection data
-    // on auto reconnect attempts. To make a change, update the
-    // `connect_data` and return 'true'.
-    cli.set_update_connection_handler([](mqtt::connect_data &connData) {
-        string newUserName{"new_user"};
-        if (connData.get_user_name() == newUserName)
-            return false;
+  const std::vector<std::string> TOPICS{"data/#", "gps"};
+  const std::vector<int> QOS{0, 1};
 
-        cout << "Previous user: '" << connData.get_user_name() << "'" << endl;
-        connData.set_user_name(newUserName);
-        cout << "New user name: '" << connData.get_user_name() << "'" << endl;
-        return true;
-    });
+  try {
+    std::cout << "Connecting to the MQTT server..." << std::flush;
+    mqtt::connect_response rsp = cli.connect(connOpts);
+    std::cout << "OK\n" << std::endl;
 
-    // const vector<string> TOPICS{"data/#", "command"};
-    const vector<string> TOPICS{"data/#", "gps"};
-    const vector<int> QOS{0, 1};
+    std::cout << "Subscribing to topics..." << std::flush;
+    cli.subscribe(TOPICS, QOS);
+    std::cout << "OK" << std::endl;
 
-    try {
-        cout << "Connecting to the MQTT server..." << flush;
-        mqtt::connect_response rsp = cli.connect(connOpts);
-        cout << "OK\n" << endl;
+    // Consume messages
 
-        std::cout << "Subscribing to topics..." << std::flush;
-        cli.subscribe(TOPICS, QOS);
-        std::cout << "OK" << std::endl;
+    while (true) {
+      auto res = cli.consume_message();
 
-        // Consume messages
+      if (res) {
+        // std::cout << msg->get_topic() << ": " << msg->to_string() <<
+        // std::endl;
 
-        while (true) {
-            auto msg = cli.consume_message();
+        const std::string msg = res->to_string();
 
-            if (msg) {
-                if (msg->get_topic() == "command" && msg->to_string() == "exit") {
-                    cout << "Exit command received" << endl;
-                    break;
-                }
+        auto pos = msg.find(',');
+        auto uuid = msg.substr(0, pos);
+        auto rest = msg.substr(pos + 1, msg.length());
 
-                cout << msg->get_topic() << ": " << msg->to_string() << endl;
-            } else if (!cli.is_connected()) {
-                cout << "Lost connection" << endl;
-                while (!cli.is_connected()) {
-                    this_thread::sleep_for(milliseconds(250));
-                }
-                cout << "Re-established connection" << endl;
-            }
+        pos = rest.find(',');
+        double lat = std::stod(rest.substr(0, pos));
+        double lon = std::stod(rest.substr(pos + 1, res.length()));
+
+        std::cout << lat << '\n';
+        std::cout << lon << '\n';
+        auto dist = distanceBetween(45.0, -81.0, lat, lon);
+
+        std::cout << dist << std::endl;
+
+      } else if (!cli.is_connected()) {
+        std::cout << "Lost connection" << std::endl;
+        while (!cli.is_connected()) {
+          std::this_thread::sleep_for(std::chrono::milliseconds(250));
         }
-
-        // Disconnect
-
-        cout << "\nDisconnecting from the MQTT server..." << flush;
-        cli.disconnect();
-        cout << "OK" << endl;
-    } catch (const mqtt::exception &exc) {
-        cerr << exc.what() << endl;
-        return 1;
+        std::cout << "Re-established connection" << std::endl;
+      }
     }
 
-    return 0;
+    // Disconnect
+
+    std::cout << "\nDisconnecting from the MQTT server..." << std::flush;
+    cli.disconnect();
+    std::cout << "OK" << std::endl;
+  } catch (const mqtt::exception &exc) {
+    std::cerr << exc.what() << std::endl;
+    return 1;
+  }
+
+  return 0;
 }
