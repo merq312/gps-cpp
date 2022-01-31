@@ -1,5 +1,11 @@
-#include "gps.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-result"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wpedantic"
 #include "mqtt/client.h"
+#pragma GCC diagnostic pop
+
+#include "gps.h"
 #include <chrono>
 #include <iostream>
 #include <string>
@@ -52,7 +58,7 @@ int main() {
 
         pos = rest.find(',');
         double lat = std::stod(rest.substr(0, pos));
-        double lon = std::stod(rest.substr(pos + 1, res.length()));
+        double lon = std::stod(rest.substr(pos + 1, rest.length()));
 
         std::cout << lat << '\n';
         std::cout << lon << '\n';
