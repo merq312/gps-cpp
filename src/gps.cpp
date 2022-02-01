@@ -1,6 +1,7 @@
 #include "gps.h"
 #include <cmath>
 #include <random>
+#include <stdexcept>
 
 double degToRad(double degrees) {
   const double PI_DIVIDE_BY_180 = 0.0174532925199433;
@@ -9,6 +10,13 @@ double degToRad(double degrees) {
 
 double distanceBetween(double lat1, double lon1, double lat2, double lon2) {
   const auto earthRadius = 6371;
+
+  if (fabs(lat1) > 90 || fabs(lat2) > 90) {
+    throw std::out_of_range("Latitude out of range");
+  }
+  if (fabs(lon1) > 180 || fabs(lon2) > 180) {
+    throw std::out_of_range("Longitude out of range");
+  }
 
   const auto deltaLatDiv2 = degToRad(lat2 - lat1) / 2.0;
   const auto deltaLonDiv2 = degToRad(lon2 - lon1) / 2.0;

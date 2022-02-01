@@ -1,4 +1,3 @@
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -18,7 +17,7 @@ int main() {
   // const string SERVER_ADDRESS{"tcp://test.mosquitto.org"};
 
   const uuids::uuid _uuid = uuids::uuid_system_generator{}();
-  const std::string client_id = uuids::to_string(_uuid);
+  const std::string client_id = uuids::to_string(_uuid).substr(0, 8);
 
   mqtt::client cli(server_address, client_id);
 
@@ -39,7 +38,7 @@ int main() {
     std::cout << "Subscribing to topics...\n";
     cli.subscribe(topics, qos);
 
-    std::cout << "client id: " << client_id.substr(0, 8) << "\n\n";
+    std::cout << "client id: " << client_id << "\n\n";
 
     MockGPS gps = MockGPS();
 
@@ -81,8 +80,8 @@ int main() {
 
           const auto dist = distanceBetween(gps.lat, gps.lon, lat, lon);
 
-          std::cout << sender_id.substr(0, 8) << ": " << std::setprecision(3)
-                    << dist << "km\n";
+          std::cout << sender_id << ": " << std::setprecision(3) << dist
+                    << "km\n";
 
         } else if (!cli.is_connected()) {
           break;
